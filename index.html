@@ -3,19 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dado do Lucas</title>
+  <title>Dado do Lucas - Espaço</title>
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #f0f8ff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px;
+      overflow: hidden;
+      background: black;
+      color: #fff;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .content {
+      position: relative;
+      text-align: center;
+      padding: 50px;
     }
 
     h1 {
-      margin-bottom: 10px;
+      margin-bottom: 20px;
+      font-size: 2rem;
     }
 
     #dado {
@@ -28,82 +41,152 @@
       font-size: 18px;
       margin: 10px;
       cursor: pointer;
+      border-radius: 5px;
+      border: none;
+      background-color: #222;
+      color: #fff;
     }
 
     .audio-container {
       position: fixed;
       top: 20px;
       right: 20px;
-      background-color: #fff;
+      background-color: rgba(0,0,0,0.6);
       padding: 10px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 
     .chat-container {
       margin-top: 30px;
-      width: 300px;
-      background-color: #fff;
+      width: 350px;
+      background-color: rgba(0,0,0,0.6);
       border-radius: 10px;
       padding: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 
     #chatOutput {
       height: 150px;
       overflow-y: auto;
-      border: 1px solid #ccc;
+      border: 1px solid #555;
       padding: 10px;
       border-radius: 5px;
       margin-bottom: 10px;
-      background-color: #f9f9f9;
+      background-color: rgba(255,255,255,0.1);
+      font-style: italic;
     }
   </style>
 </head>
 <body>
 
-  <h1>O Lucas tem dado em casa. Veja agora.</h1>
+  <!-- Canvas para estrelas -->
+  <canvas id="stars"></canvas>
 
-  <div id="dado">🎲</div>
-  <button onclick="jogarDado()">Jogar Dado</button>
+  <div class="content">
+    <h1>O Lucas tem dado em casa. Veja agora.</h1>
 
-  <!-- Player de áudio -->
-  <div class="audio-container">
-    <audio controls>
-      <source src="musica.mp3" type="audio/mpeg">
-      Seu navegador não suporta áudio.
-    </audio>
-  </div>
+    <div id="dado">🎲</div>
+    <button onclick="jogarDado()">Jogar Dado</button>
 
-  <!-- Chat de piadas -->
-  <div class="chat-container">
-    <div id="chatOutput">Clique no botão para receber uma piada sobre dado!</div>
-    <button onclick="piadaDado()">Nova Piada</button>
+    <!-- Player de áudio -->
+    <div class="audio-container">
+      <audio controls>
+        <source src="musica.mp3" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+      </audio>
+    </div>
+
+    <!-- Chat de frases de efeito -->
+    <div class="chat-container">
+      <div id="chatOutput">Clique no botão para receber uma frase épica!</div>
+      <button onclick="fraseEfeito()">Nova Frase</button>
+    </div>
   </div>
 
   <script>
-    // Função para jogar dado
+    // Dado
     function jogarDado() {
       const numero = Math.floor(Math.random() * 6) + 1;
       const dadosEmojis = ["⚀","⚁","⚂","⚃","⚄","⚅"];
       document.getElementById("dado").textContent = dadosEmojis[numero - 1];
     }
 
-    // Função para piadas de dado
-    const piadas = [
-      "Por que o dado foi ao médico? Porque estava rolando mal!",
-      "O que o dado disse pro outro? Pare de rolar!",
-      "Por que o dado nunca se perde? Porque ele sempre dá uma chance!",
-      "Dado entrou no bar e disse: 'Vou rolar uma boa!'",
-      "Não confie no dado… ele sempre muda de face!"
+    // Frases de efeito estilo Star Wars
+    const frases = [
+      "Que a Força esteja com você.",
+      "O medo é o caminho para o Lado Negro.",
+      "Não tente. Faça ou não faça. Não há tentativa.",
+      "A jornada de mil parsecs começa com um único passo.",
+      "A Força é poderosa em mim, como é em você.",
+      "Sempre há esperança, mesmo na galáxia mais sombria.",
+      "O destino não é escrito, ele é forjado.",
+      "Grande poder traz grande responsabilidade.",
+      "A coragem não é ausência de medo, mas a superação dele.",
+      "Mesmo a menor luz pode brilhar no escuro mais profundo."
     ];
 
-    function piadaDado() {
-      const aleatorio = Math.floor(Math.random() * piadas.length);
+    function fraseEfeito() {
+      const aleatorio = Math.floor(Math.random() * frases.length);
       const chatOutput = document.getElementById("chatOutput");
-      chatOutput.textContent = piadas[aleatorio];
+      chatOutput.textContent = frases[aleatorio];
     }
-  </script>
 
+    // Efeito estrelas estilo Star Wars
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    const stars = [];
+    const numStars = 200;
+
+    function initStars() {
+      for (let i = 0; i < numStars; i++) {
+        stars.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          z: Math.random() * width
+        });
+      }
+    }
+
+    function moveStars() {
+      for (let i = 0; i < numStars; i++) {
+        stars[i].z -= 2;
+        if (stars[i].z <= 0) {
+          stars[i].x = Math.random() * width;
+          stars[i].y = Math.random() * height;
+          stars[i].z = width;
+        }
+      }
+    }
+
+    function drawStars() {
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, width, height);
+      ctx.fillStyle = "white";
+      for (let i = 0; i < numStars; i++) {
+        const k = 128.0 / stars[i].z;
+        const x = (stars[i].x - width / 2) * k + width / 2;
+        const y = (stars[i].y - height / 2) * k + height / 2;
+        const size = (1 - stars[i].z / width) * 3;
+        ctx.fillRect(x, y, size, size);
+      }
+    }
+
+    function animate() {
+      moveStars();
+      drawStars();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    initStars();
+    animate();
+  </script>
 </body>
 </html>
