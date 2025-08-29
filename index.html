@@ -3,41 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jogar Dado</title>
+  <title>Dado do Lucas</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-      background-color: #f0f0f0;
+      background-color: #f0f8ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
     }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
     #dado {
       font-size: 100px;
       margin: 20px 0;
     }
+
     button {
       padding: 10px 20px;
-      font-size: 20px;
+      font-size: 18px;
+      margin: 10px;
       cursor: pointer;
+    }
+
+    .audio-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .chat-container {
+      margin-top: 30px;
+      width: 300px;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    #chatOutput {
+      height: 150px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      background-color: #f9f9f9;
     }
   </style>
 </head>
 <body>
 
-  <h1>Jogue o Dado!</h1>
+  <h1>O Lucas tem dado em casa. Veja agora.</h1>
+
   <div id="dado">🎲</div>
   <button onclick="jogarDado()">Jogar Dado</button>
 
+  <!-- Player de áudio -->
+  <div class="audio-container">
+    <audio controls>
+      <source src="musica.mp3" type="audio/mpeg">
+      Seu navegador não suporta áudio.
+    </audio>
+  </div>
+
+  <!-- Chat de piadas -->
+  <div class="chat-container">
+    <div id="chatOutput">Clique no botão para receber uma piada sobre dado!</div>
+    <button onclick="piadaDado()">Nova Piada</button>
+  </div>
+
   <script>
+    // Função para jogar dado
     function jogarDado() {
-      // Gera número aleatório de 1 a 6
       const numero = Math.floor(Math.random() * 6) + 1;
-
-      // Representação do dado usando emojis
       const dadosEmojis = ["⚀","⚁","⚂","⚃","⚄","⚅"];
-
-      // Mostra o dado correspondente
       document.getElementById("dado").textContent = dadosEmojis[numero - 1];
+    }
+
+    // Função para piadas de dado
+    const piadas = [
+      "Por que o dado foi ao médico? Porque estava rolando mal!",
+      "O que o dado disse pro outro? Pare de rolar!",
+      "Por que o dado nunca se perde? Porque ele sempre dá uma chance!",
+      "Dado entrou no bar e disse: 'Vou rolar uma boa!'",
+      "Não confie no dado… ele sempre muda de face!"
+    ];
+
+    function piadaDado() {
+      const aleatorio = Math.floor(Math.random() * piadas.length);
+      const chatOutput = document.getElementById("chatOutput");
+      chatOutput.textContent = piadas[aleatorio];
     }
   </script>
 
